@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MODERATOR
+  ORGANIZER
+  STAFF
+  ATTENDEE
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+  EXPIRED
+  CHECKED_IN
+}
+
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  password      String
+  fullName      String?
+  role          Role         @default(ATTENDEE)
+  bookings      Booking[]
+  eventsCreated Event[]      @relation("CreatedEvents")
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  staffAt       EventStaff[] // Events this staff member can manage.
+}
+
+model Event {
+  id          String       @id @default(cuid())
+  title       String
+  description String       @db.Text // Supports long event content.
+  location    String
+  startDate   DateTime
+  endDate     DateTime
+  imageUrl    String?
+  ticketTypes TicketType[]
+  category    String
+  isPublished Boolean      @default(false) // Draft or published state.
+  creatorId   String
+  creator     User         @relation("CreatedEvents", fields: [creatorId], references: [id])
+  bookings    Booking[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  staffs      EventStaff[] // Staff assigned to the event.
+
+  @@index([startDate]) // Speeds up event searches by date.
+}
+
+model TicketType {
+  id        String    @id @default(cuid())
+  name      String // Example: VIP or Early Bird.
+  price     Decimal   @db.Decimal(10, 2)
+  capacity  Int // Total number of tickets for this type.
+  available Int // Remaining quantity for this type.
+  eventId   String
+  event     Event     @relation(fields: [eventId], references: [id])
+  bookings  Booking[]
+}
+
+model Booking {
+  id           String        @id @default(cuid())
+  userId       String
+  eventId      String
+  ticketTypeId String // Selected ticket type.
+  quantity     Int           @default(1) // Supports buying multiple tickets at once.
+  qrCode       String?       @unique
+  status       BookingStatus @default(PENDING)
+
+  // Stores the final amount at purchase time.
+  totalPrice Decimal      @db.Decimal(10, 2)
+
+  user       User       @relation(fields: [userId], references: [id])
+  event      Event      @relation(fields: [eventId], references: [id])
+  ticketType TicketType @relation(fields: [ticketTypeId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model EventStaff {
+  id      String @id @default(cuid())
+  userId  String
+  eventId String
+  user    User   @relation(fields: [userId], references: [id])
+  event   Event  @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId]) // Prevents duplicate staff assignments per event.
+}
