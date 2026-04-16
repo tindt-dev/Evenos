@@ -1,63 +1,110 @@
-# compiled output & production
-/dist
-/build
-/out
-/.next/
-/generated/prisma
-*.tsbuildinfo
-next-env.d.ts
+# ==========================================
+# COMPILED OUTPUT & BUILD FILES
+# ==========================================
+dist/
+build/
+.next/
+out/
+/generated/
 
-# dependencies
-/node_modules
+# ==========================================
+# DEPENDENCIES
+# ==========================================
+node_modules/
 /.pnp
 .pnp.*
+.pnpm-store/
+.pnpm/
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
 
-# Logs & Debug
-logs
+# ==========================================
+# ENVIRONMENT & CONFIGURATION
+# ==========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# ==========================================
+# LOGS
+# ==========================================
+logs/
 *.log
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+lerna-debug.log*
 
-# OS & IDEs
-.DS_Store
-.vercel
-/.idea
+# ==========================================
+# TESTING & COVERAGE
+# ==========================================
+coverage/
+.nyc_output/
+/coverage/
+
+# ==========================================
+# IDEs & EDITORS
+# ==========================================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
 .project
 .classpath
 .c9/
 *.launch
 .settings/
 *.sublime-workspace
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+*.swp
+*.swo
 
-# Tests
-/coverage
-/.nyc_output
+# ==========================================
+# OS & SYSTEM FILES
+# ==========================================
+.DS_Store
+Thumbs.db
+*.pem
+.temp/
+.tmp/
 
-# env files
-.env
-.env.*
-
-# Temp & Runtime
-.temp
-.tmp
-pids
+# ==========================================
+# RUNTIME & PROCESS DATA
+# ==========================================
+pids/
 *.pid
 *.seed
 *.pid.lock
+
+# ==========================================
+# DIAGNOSTIC & DEBUG FILES
+# ==========================================
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# Misc
-*.pem
+# ==========================================
+# TYPESCRIPT
+# ==========================================
+*.tsbuildinfo
+next-env.d.ts
+
+# ==========================================
+# PLATFORM-SPECIFIC
+# ==========================================
+# Vercel
+.vercel/
+
+# IDE temp files
+.vscode-settings.json
+.vscode-launch.json
+.vscode-tasks.json
