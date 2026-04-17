@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -77,6 +76,14 @@ model Booking {
   quantity     Int           @default(1) // Supports buying multiple tickets at once.
   qrCode       String?       @unique
   status       BookingStatus @default(PENDING)
+
+  // Buyer contact collected during checkout.
+  buyerEmail String?
+  buyerPhone String?
+
+  // Fake payment metadata (no real integration yet).
+  paymentMethod String?
+  paidAt         DateTime?
 
   // Stores the final amount at purchase time.
   totalPrice Decimal      @db.Decimal(10, 2)

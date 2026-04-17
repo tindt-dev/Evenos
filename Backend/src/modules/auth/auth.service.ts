@@ -1,13 +1,12 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/database/prisma/prisma.service';
-
-type RegisterInput = {
-  email: string;
-  password: string;
-  fullName?: string;
-};
+import type { RegisterDto } from './dto/register.dto';
 
 type AuthUser = {
   id: string;
@@ -32,7 +31,7 @@ export class AuthService {
     };
   }
 
-  async register(data: RegisterInput) {
+  async register(data: RegisterDto) {
     const email = data.email?.trim().toLowerCase();
     const password = data.password?.trim();
     const fullName = data.fullName?.trim() || null;
