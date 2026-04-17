@@ -1,4 +1,4 @@
 export const siteConfig = {
   name: "Evenos",
-  description: "Frontend workspace for Evenos, organized by app, feature, and shared layers.",
+  description: "Đặt vé sự kiện nhanh chóng, minh bạch và chuyên nghiệp.",
 } as const;

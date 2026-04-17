@@ -1,3 +1,5 @@
+import { apiFetch } from "@/shared/lib/api";
+
 type AuthPayload = {
   email: string;
   password: string;
@@ -23,43 +25,22 @@ export type RegisterResponse = LoginResponse & {
   message: string;
 };
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:3001";
-
-async function parseResponse<T>(response: Response): Promise<T> {
-  const payload = await response.json().catch(() => null);
-
-  if (!response.ok) {
-    const message =
-      payload && typeof payload.message === "string"
-        ? payload.message
-        : "Request failed.";
-    throw new Error(message);
-  }
-
-  return payload as T;
-}
-
 export async function register(payload: RegisterPayload) {
-  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+  return apiFetch<RegisterResponse>("/auth/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
   });
-
-  return parseResponse<RegisterResponse>(response);
 }
 
 export async function login(payload: AuthPayload) {
-  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+  return apiFetch<LoginResponse>("/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
   });
-
-  return parseResponse<LoginResponse>(response);
 }

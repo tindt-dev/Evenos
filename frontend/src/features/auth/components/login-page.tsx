@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { AuthCard } from "@/features/auth/components/auth-card";
 import { login } from "@/shared/lib/auth-api";
@@ -12,6 +12,7 @@ import { Label } from "@/shared/ui/label";
 
 export function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,7 +26,8 @@ export function LoginPage() {
     try {
       const response = await login({ email, password });
       saveAuthSession(response);
-      router.push("/");
+      const next = searchParams.get("next");
+      router.push(next && next.startsWith("/") ? next : "/");
       router.refresh();
     } catch (caughtError) {
       const message =
